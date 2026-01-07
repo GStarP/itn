@@ -1,0 +1,20 @@
+[project]
+name = "itn"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "wetextprocessing>=1.0.4.1 ; sys_platform != 'win32'",
+]
+
+[[tool.uv.index]]
+name = 'ali'
+url = "https://mirrors.aliyun.com/pypi/simple/"
+default = true
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.2",
+    "ruff>=0.14.10",
+]
