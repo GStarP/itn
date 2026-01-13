@@ -32,6 +32,11 @@ def test_date():
     expected_text = "我2030年回家"
     assert itn_text(raw_text) == expected_text
 
+    # 年月
+    raw_text = "我二零二六年七月回家"
+    expected_text = "我2026年7月回家"
+    assert itn_text(raw_text) == expected_text
+
     # 月日
     raw_text = "我七月八号回家"
     expected_text = "我7月8号回家"
