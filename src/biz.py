@@ -6,14 +6,14 @@ itn_model = None
 
 
 def itn_text(text: str) -> str:
-    if sys.platform == "win32":
+    if sys.platform != "linux":
         return text
 
     return itn_model.normalize(text)  # type: ignore
 
 
-# * Windows 平台下无法使用
-if sys.platform != "win32":
+# * 仅能在 Linux 下运行
+if sys.platform == "linux":
     import itn
 
     def _patch_file(relative_path: str, content: str):
