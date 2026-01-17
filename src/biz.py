@@ -25,6 +25,27 @@ if sys.platform != "win32":
         else:
             print(f"_handle_blacklist_if_not: file not found, path={file_path}")
 
+    def _append_unique_line(relative_path: str, line: str):
+        file_path = path.join(path.dirname(itn.__file__), relative_path)
+        if not path.exists(file_path):
+            print(f"_append_unique_line: file not found, path={file_path}")
+            return
+
+        with open(file_path, "r", encoding="utf-8") as f:
+            original = f.read()
+
+        normalized = original.replace("\r\n", "\n")
+        target = line.rstrip("\n")
+        if target in normalized.split("\n"):
+            print(f"_append_unique_line: already present, path={file_path}")
+            return
+
+        suffix = "" if normalized.endswith("\n") or normalized == "" else "\n"
+        updated = normalized + suffix + target + "\n"
+        with open(file_path, "w", encoding="utf-8") as f:
+            f.write(updated)
+        print(f"_append_unique_line: appended, path={file_path}")
+
     def _patch():
         MM_TSV_CONTENT = """一月	1月
 二月	2月
@@ -244,8 +265,13 @@ class InverseNormalizer(Processor):
 """
         _patch_file("./chinese/data/date/mm.tsv", MM_TSV_CONTENT)
         _patch_file("./chinese/data/date/dd.tsv", DD_TSV_CONTENT)
+        # Ensure domain-specific fixed phrases are never normalized as numbers.
+        # Format: <raw>\t<verbalized>
         _patch_file("./chinese/rules/date.py", DATE_RULE_CONTENT)
         _patch_file("./chinese/inverse_normalizer.py", MAIN_CONTENT)
+
+        # 添加白名单
+        _append_unique_line("./chinese/data/default/whitelist.tsv", "十五五\t十五五")
 
     # 修改源文件
     _patch()

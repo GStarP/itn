@@ -55,3 +55,10 @@ def test_money():
     expected_text = "金价是1300元"
 
     assert itn_text(raw_text) == expected_text
+
+
+def test_fixed_word():
+    raw_text = "十五五规划"
+    expected_text = "十五五规划"
+
+    assert itn_text(raw_text) == expected_text
